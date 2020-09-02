@@ -57,7 +57,7 @@ int main (int argc, const char * argv[])
     char input_msg[BUFFER_SIZE];//发信
     //尝试连接
     if (connect(server_sock_fd, (struct sockaddr *)&server_addr, sizeof(struct sockaddr_in))==0) {
-        //.创建一个fd_set变量（fd_set实为包含了一个整数数组的结构体），用来存放所有的待检查的文件描述符
+        //创建一个fd_set变量（fd_set实为包含了一个整数数组的结构体），用来存放所有的待检查的文件描述符
        fd_set client_fd_set;
         //等待时间
        struct timeval tv;
