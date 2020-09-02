@@ -9,14 +9,13 @@
 #include <vector>
 #define BACKLOG 5 //完成三次握手但没有accept的队列的长度
 #define CONCURRENT_MAX 8 //应用层同时可以处理的连接
-#define SERVER_PORT 11332
 #define BUFFER_SIZE 1024
-#define QUIT_CMD ".quit"
 
 int client_fds[CONCURRENT_MAX];
 
 typedef std::vector<std::string>  StringList;
 
+//分割字符串
 StringList splitstr(const std::string& str, char tag)
 {
     StringList  li;
@@ -39,12 +38,10 @@ StringList splitstr(const std::string& str, char tag)
             subStr.push_back(str[i]);
         }
     }
- 
     if(!subStr.empty()) //剩余的子串作为最后的子字符串
     {
         li.push_back(subStr);
     }
- 
     return li;
 }
 
@@ -56,7 +53,7 @@ int main (int argc, const char * argv[])
    struct sockaddr_in server_addr;
    server_addr.sin_len = sizeof(struct sockaddr_in);
    server_addr.sin_family = AF_INET;
-   server_addr.sin_port = htons(SERVER_PORT);
+   server_addr.sin_port = htons(11332);
    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
    bzero(&(server_addr.sin_zero),8);
    //创建socket
@@ -71,18 +68,19 @@ int main (int argc, const char * argv[])
        perror("bind error");
        return 1;
    }
-   //listen
+   //侦听
    if (listen(server_sock_fd, BACKLOG) == -1) {
        perror("listen error");
        return 1;
    }
-   //fd_set
+   //创建一个fd_set变量（fd_set实为包含了一个整数数组的结构体），用来存放所有的待检查的文件描述符
    fd_set server_fd_set;
    int max_fd = -1;
    struct timeval tv;
    tv.tv_sec = 20;
    tv.tv_usec = 0;
    while (1) {
+       //清空fd_set变量，并将需要检查的所有文件描述符加入fd_set
        FD_ZERO(&server_fd_set);
        //标准输入
        FD_SET(STDIN_FILENO, &server_fd_set);
@@ -104,12 +102,10 @@ int main (int argc, const char * argv[])
                }
            }
        }
-       int ret = select(max_fd+1, &server_fd_set, NULL, NULL, &tv);
-       if (ret < 0) {
-           //perror("select 出错\n");
+       int ret = select(max_fd+1, &server_fd_set, NULL, NULL, &tv);//调用select。若返回-1，则说明出错;返回0,则说明超时，返回正数，则为发生状态变化的文件描述符的个数
+       if (ret < 0) {//出错
            continue;
-       }else if(ret == 0){
-           //printf("select 超时\n");
+       }else if(ret == 0){//超时
            continue;
        }else{
            //ret为未状态发生变化的文件描述符的个数
