@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/mac/Desktop/cmaket/server.cpp
+stdio.h
+-
+stdlib.h
+-
+netinet/in.h
+-
+sys/socket.h
+-
+arpa/inet.h
+-
+string.h
+-
+unistd.h
+-
+string
+-
+vector
+-
+
