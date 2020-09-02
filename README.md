@@ -1,5 +1,5 @@
 # chat
-使用C++的socket编程实现聊天
+使用C++的socket编程实现聊天/n
 客户端两个用户为（用户名：a 密码：111）（用户名：b 密码：222）
 先使用cmake编译程序
 直接运行server及client程序
